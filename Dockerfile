@@ -1,26 +1,21 @@
-# Use official OpenJDK base image from DockerHub
-FROM openjdk:11-jdk-slim as build
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:17-jdk-slim
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the source code into the container
-COPY . .
+# Copy the pom.xml and source code to the container
+COPY pom.xml /app
+COPY src /app/src
 
-# Install Maven and build the project
-RUN apt-get update && apt-get install -y maven && mvn clean package
+# Build the project with Maven
+RUN ./mvnw clean package -DskipTests
 
-# Use a smaller base image for the final stage
-FROM openjdk:11-jdk-slim
+# Copy the jar file into the container
+COPY target/email-writer-sb.jar /app/email-writer-sb.jar
 
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the JAR file from the build stage into the container
-COPY --from=build /app/target/*.jar app.jar
-
-# Expose the port your Spring Boot app will run on (default: 8080)
+# Expose port 8080
 EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run the jar file
+CMD ["java", "-jar", "email-writer-sb.jar"]

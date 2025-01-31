@@ -1,6 +1,0 @@
-spring.application.name=email_writer-sb
-
-# MAKE THIS AS ENVIRONMENTAL VARIABLE
-server.port=8089
-gemini.api.url=${GEMINI_API_URL}
-gemini.api.key=${GEMINI_API_KEY}
