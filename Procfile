@@ -1,0 +1,1 @@
+web: java -jar target/email-writer-backend.jar
